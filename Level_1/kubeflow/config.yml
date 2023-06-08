@@ -1,0 +1,3 @@
+#!/usr/bin/env python
+train: true
+model_dir_if_no_train: ''

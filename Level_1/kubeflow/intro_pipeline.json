@@ -1,0 +1,386 @@
+{
+  "pipelineSpec": {
+    "components": {
+      "comp-preprocess": {
+        "executorLabel": "exec-preprocess",
+        "inputDefinitions": {
+          "parameters": {
+            "bucket": {
+              "type": "STRING"
+            },
+            "input-data-uri": {
+              "type": "STRING"
+            },
+            "input-end-date": {
+              "type": "STRING"
+            },
+            "input-start-date": {
+              "type": "STRING"
+            },
+            "model-dir": {
+              "type": "STRING"
+            },
+            "preprocess-data-dir": {
+              "type": "STRING"
+            },
+            "temp-dir": {
+              "type": "STRING"
+            },
+            "uri-data": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "parameters": {
+            "output-dir-path": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-test": {
+        "executorLabel": "exec-test",
+        "inputDefinitions": {
+          "parameters": {
+            "model-dir": {
+              "type": "STRING"
+            },
+            "model-validation-dir": {
+              "type": "STRING"
+            },
+            "performance-threshold": {
+              "type": "STRING"
+            },
+            "preprocess-data-dir": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "parameters": {
+            "output-performance-model": {
+              "type": "STRING"
+            }
+          }
+        }
+      },
+      "comp-train": {
+        "executorLabel": "exec-train",
+        "inputDefinitions": {
+          "parameters": {
+            "batch-size": {
+              "type": "INT"
+            },
+            "bucket": {
+              "type": "STRING"
+            },
+            "dropout": {
+              "type": "DOUBLE"
+            },
+            "filters": {
+              "type": "INT"
+            },
+            "model-dir": {
+              "type": "STRING"
+            },
+            "n-checkpoints": {
+              "type": "INT"
+            },
+            "preprocess-data-dir": {
+              "type": "STRING"
+            },
+            "temp-dir": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "parameters": {
+            "output-model-dir": {
+              "type": "STRING"
+            }
+          }
+        }
+      }
+    },
+    "deploymentSpec": {
+      "executors": {
+        "exec-preprocess": {
+          "container": {
+            "command": [
+              "python3",
+              "/Preprocess/run.py",
+              "--model-dir",
+              "{{$.inputs.parameters['model-dir']}}",
+              "--bucket",
+              "{{$.inputs.parameters['bucket']}}",
+              "--preprocess-data-dir",
+              "{{$.inputs.parameters['preprocess-data-dir']}}",
+              "--input-data-uri",
+              "{{$.inputs.parameters['input-data-uri']}}",
+              "--input-start-date",
+              "{{$.inputs.parameters['input-start-date']}}",
+              "--input-end-date",
+              "{{$.inputs.parameters['input-end-date']}}",
+              "--uri-data",
+              "{{$.inputs.parameters['uri-data']}}",
+              "--temp-dir",
+              "{{$.inputs.parameters['temp-dir']}}",
+              "--output-dir-path",
+              "{{$.outputs.parameters['output-dir-path'].output_file}}"
+            ],
+            "image": "gcr.io/leafy-thunder-389112/kubeflow-repo/preprocess-image@sha256:2c9d4e4e0c0af2bcae5e94d9626c48736399a2c6a9866a94b5af625873138697"
+          }
+        },
+        "exec-test": {
+          "container": {
+            "command": [
+              "python3",
+              "/test/task.py",
+              "--model-dir",
+              "{{$.inputs.parameters['model-dir']}}",
+              "--preprocess-data-dir",
+              "{{$.inputs.parameters['preprocess-data-dir']}}",
+              "--model-validation-dir",
+              "{{$.inputs.parameters['model-validation-dir']}}",
+              "--performance-threshold",
+              "{{$.inputs.parameters['performance-threshold']}}",
+              "--output-performance-model",
+              "{{$.outputs.parameters['output-performance-model'].output_file}}"
+            ],
+            "image": "gcr.io/leafy-thunder-389112/kubeflow-repo/test-image@sha256:6c7f37ce4372fde90e426d3b0874bb78c4f2cfeedc825da9d125af41e450eeff"
+          }
+        },
+        "exec-train": {
+          "container": {
+            "command": [
+              "python3",
+              "/trainer/task.py",
+              "--model-dir",
+              "{{$.inputs.parameters['model-dir']}}",
+              "--bucket",
+              "{{$.inputs.parameters['bucket']}}",
+              "--preprocess-data-dir",
+              "{{$.inputs.parameters['preprocess-data-dir']}}",
+              "--batch-size",
+              "{{$.inputs.parameters['batch-size']}}",
+              "--filters",
+              "{{$.inputs.parameters['filters']}}",
+              "--dropout",
+              "{{$.inputs.parameters['dropout']}}",
+              "--n-checkpoints",
+              "{{$.inputs.parameters['n-checkpoints']}}",
+              "--temp-dir",
+              "{{$.inputs.parameters['temp-dir']}}",
+              "--output-model-dir",
+              "{{$.outputs.parameters['output-model-dir'].output_file}}"
+            ],
+            "image": "gcr.io/leafy-thunder-389112/kubeflow-repo/train-image@sha256:8a467f8849155cba49522131bf1e8d558a7afc07ac9179e32ac7776b82be599d"
+          }
+        }
+      }
+    },
+    "pipelineInfo": {
+      "name": "finalpipeline"
+    },
+    "root": {
+      "dag": {
+        "tasks": {
+          "preprocess": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-preprocess"
+            },
+            "inputs": {
+              "parameters": {
+                "bucket": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "leafy-thunder-389112-machine-learning-solene"
+                    }
+                  }
+                },
+                "input-data-uri": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "gs://leafy-thunder-389112-machine-learning-solene/raw-data/training_VB.csv"
+                    }
+                  }
+                },
+                "input-end-date": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "input-start-date": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "model-dir": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "level-1-models/temp/processor_state.pkl"
+                    }
+                  }
+                },
+                "preprocess-data-dir": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "gs://leafy-thunder-389112-machine-learning-solene/preprocess-data"
+                    }
+                  }
+                },
+                "temp-dir": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "raw-data/"
+                    }
+                  }
+                },
+                "uri-data": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "raw-data/glove.twitter.27B.25d.txt"
+                    }
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "preprocess"
+            }
+          },
+          "test": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-test"
+            },
+            "dependentTasks": [
+              "preprocess",
+              "train"
+            ],
+            "inputs": {
+              "parameters": {
+                "model-dir": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "output-model-dir",
+                    "producerTask": "train"
+                  }
+                },
+                "model-validation-dir": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "gs://leafy-thunder-389112-machine-learning-solene/level-1-models/valid_models/valid_model"
+                    }
+                  }
+                },
+                "performance-threshold": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "{\"acc\": 0.75, \"std\": 0.3}"
+                    }
+                  }
+                },
+                "preprocess-data-dir": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "output-dir-path",
+                    "producerTask": "preprocess"
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "test"
+            }
+          },
+          "train": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-train"
+            },
+            "dependentTasks": [
+              "preprocess"
+            ],
+            "inputs": {
+              "parameters": {
+                "batch-size": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "128"
+                    }
+                  }
+                },
+                "bucket": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                },
+                "dropout": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "doubleValue": 0.5
+                    }
+                  }
+                },
+                "filters": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "64"
+                    }
+                  }
+                },
+                "model-dir": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "gs://leafy-thunder-389112-machine-learning/level-1-models/candidate_models"
+                    }
+                  }
+                },
+                "n-checkpoints": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "1"
+                    }
+                  }
+                },
+                "preprocess-data-dir": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "output-dir-path",
+                    "producerTask": "preprocess"
+                  }
+                },
+                "temp-dir": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "train"
+            }
+          }
+        }
+      }
+    },
+    "schemaVersion": "2.0.0",
+    "sdkVersion": "kfp-1.8.22"
+  },
+  "runtimeConfig": {}
+}

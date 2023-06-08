@@ -1,0 +1,7 @@
+{ "bucket": "",
+  "temp_dir":"",
+  "batch_size":128,
+  "filters": 64,
+  "dropout": 0.5,
+  "n_checkpoints": 1,
+  "model_dir" : "gs://leafy-thunder-389112-machine-learning/level-1-models/candidate_models"}

@@ -1,0 +1,4 @@
+{ "model_validation_dir" : "gs://leafy-thunder-389112-machine-learning-solene/level-1-models/valid_models/valid_model",
+  "performance_threshold" :  {"acc":0.75,
+                              "std": 0.3}
+}

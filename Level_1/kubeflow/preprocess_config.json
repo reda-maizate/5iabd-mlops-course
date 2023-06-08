@@ -1,0 +1,8 @@
+{ "bucket": "leafy-thunder-389112-machine-learning-solene",
+  "uri_data": "raw-data/glove.twitter.27B.25d.txt",
+  "temp_dir": "raw-data/",
+  "input_start_date" : "",
+  "input_end_date" : "",
+  "input_data_uri": "gs://leafy-thunder-389112-machine-learning-solene/raw-data/training_VB.csv",
+  "model_dir" : "level-1-models/temp/processor_state.pkl",
+  "preprocess_data_dir" : "gs://leafy-thunder-389112-machine-learning-solene/preprocess-data"}
