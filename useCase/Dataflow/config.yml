@@ -1,0 +1,8 @@
+project-id: '{PROJECT-ID}'
+staging-location: 'gs://{PROJECT-ID}-dataflow/staging'
+temp-location: 'gs://{PROJECT-ID}--dataflow/temp'
+region: 'europe-west1'
+table: 'chat_table'
+dataset: 'CHAT'
+subscription: 'chat-topic-sub'
+model_name: 'tweet_sentiment_classifier'
