@@ -1,3 +1,5 @@
+# !pip install kfp
+
 import kfp
 from kfp import dsl
 import yaml
@@ -8,7 +10,8 @@ from kfp.v2 import compiler
 import google.cloud.aiplatform as aip
 
 
-PIPELINE_ROOT="gs://leafy-thunder-389112-machine-learning-solene/pipeline_root/intro"
+BUCKET_NAME="<BUCKET_NAME>" # To fill
+PIPELINE_ROOT=f"gs://{BUCKET_NAME}/pipeline_root/intro"
 REGION='europe-west1'
 DISPLAY_NAME = "intro-pipeline-job-unique"
 
@@ -61,7 +64,3 @@ job = aip.PipelineJob(
 )
 
 job.run()
-
-
-
-

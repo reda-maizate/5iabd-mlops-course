@@ -1,0 +1,9 @@
+{ "bucket": "",
+  "uri_data": "raw-data/glove.twitter.27B.25d.txt",
+  "temp_dir": "raw-data/",
+  "input_start_date" : "",
+  "input_end_date" : "",
+  "input_data_uri": "gs://<BUCKET_NAME>/raw-data/training_VA.csv",
+  "model_dir" : "level-1-models/temp/processor_state.pkl",
+  "preprocess_data_dir" : "gs://<BUCKET_NAME>/preprocess-data",
+  "load_json": "confg.json"}

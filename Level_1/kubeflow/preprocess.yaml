@@ -16,7 +16,7 @@ outputs:
 
 implementation:
   container:
-    image: gcr.io/leafy-thunder-389112/kubeflow-repo/preprocess-image@sha256:2c9d4e4e0c0af2bcae5e94d9626c48736399a2c6a9866a94b5af625873138697
+    image: <IMAGE_PREPROCESS>:latest
     # image: gcr.io/leafy-thunder-389112/kubeflow-repo/preprocess-image:latest
     # command is a list of strings (command-line arguments).
     # The YAML language has two syntaxes for lists and you can use either of them.

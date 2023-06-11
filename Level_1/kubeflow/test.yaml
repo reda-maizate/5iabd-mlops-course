@@ -12,7 +12,7 @@ outputs:
 
 implementation:
   container:
-    image: gcr.io/leafy-thunder-389112/kubeflow-repo/test-image@sha256:6c7f37ce4372fde90e426d3b0874bb78c4f2cfeedc825da9d125af41e450eeff
+    image: <IMAGE_TEST_MODEL>:latest
     # image: gcr.io/leafy-thunder-389112/kubeflow-repo/test-image:latest
     # command is a list of strings (command-line arguments).
     # The YAML language has two syntaxes for lists and you can use either of them.

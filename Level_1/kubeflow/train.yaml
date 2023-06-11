@@ -10,13 +10,14 @@ inputs:
 - {name: filters, type: Integer, description: 'Embedding data GCS or GQ URI set during Vertex AI training'}
 - {name: dropout, type: Float, description: 'Embedding data GCS or GQ URI set during Vertex AI training'}
 - {name: n-checkpoints, type: Integer, description: 'Embedding data GCS or GQ URI set during Vertex AI training'}
+- {name: embedding-dim, type: int, description: 'Embedding dimension'}
 
 outputs:
 - {name: output-model-dir, type: String, description: 'Temp dir set during Vertex AI training'}
 
 implementation:
   container:
-    image: gcr.io/leafy-thunder-389112/kubeflow-repo/train-image@sha256:8a467f8849155cba49522131bf1e8d558a7afc07ac9179e32ac7776b82be599d
+    image: <IMAGE_TRAIN>:latest
     # command is a list of strings (command-line arguments).
     # The YAML language has two syntaxes for lists and you can use either of them.
     # Here we use the "flow syntax" - comma-separated strings inside square brackets.
@@ -38,6 +39,8 @@ implementation:
       {inputValue: dropout},
       --n-checkpoints,
       {inputValue: n-checkpoints},
+      --embedding-dim,
+      {inputValue: embedding-dim},
       --temp-dir,
       {inputValue: temp-dir},
       --output-model-dir,
